@@ -24,6 +24,8 @@ class SettingSeeder extends Seeder
             'logo' => 'logo-putih.png',
             'favicon' => 'favicon.png',
             'login_logo' => 'login-logo.png',
+            'darijam' => 18,
+            'sampaijam' => 8,       
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

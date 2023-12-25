@@ -20,7 +20,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data = User::where('id', $user->id)->get();
         return view('profile.index', [
-            'title' => 'Profile',
+            'title' => env('APP_NAME') . ' | ' .  'Profile',
             'breadcrumb' => 'Profile',
             'user' => $user,
             'data' => $data,

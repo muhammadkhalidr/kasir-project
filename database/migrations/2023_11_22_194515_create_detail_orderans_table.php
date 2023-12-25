@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_orderans', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->integer('id_transaksi')->nullable();
             $table->string('notrx')->nullable();
-            $table->string('namapemesan', 50)->nullable();
             $table->string('namabarang', 50)->nullable();
             $table->integer('jumlah')->nullable();
             $table->bigInteger('harga')->nullable();
@@ -24,8 +24,7 @@ return new class extends Migration
             $table->integer('sisa')->nullable();
             $table->string('status', 50)->nullable();
             $table->timestamps();
-
-            $table->id('id_orderan')->nullable();
+            $table->foreignId('id_pelanggan')->nullable();
         });
     }
 

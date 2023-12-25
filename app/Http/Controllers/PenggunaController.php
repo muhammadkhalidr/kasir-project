@@ -25,9 +25,11 @@ class PenggunaController extends Controller
         // return view('errors.403');
 
         $user = Auth::user();
-        $datas = User::all()->where('level', 1);
+        $datas = User::where('level', 1)
+            ->orWhere('level', 3)
+            ->get();
         return view('pengguna.data', [
-            'title' => 'Data Admin',
+            'title' => env('APP_NAME') . ' | ' . 'Data Admin',
             'breadcrumb' => 'Pengguna',
             'user' => $user,
             'penggunas' => $datas,

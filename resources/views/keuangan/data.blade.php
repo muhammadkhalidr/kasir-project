@@ -1,12 +1,12 @@
 @extends('keuangan.main')
 
 @section('judul')
-    <h3>Keuangan</h3>
+    <h3>Log Keuangan</h3>
 @endsection
 
 @section('content')
     <div class="row">
-        <div class="col-4">
+        <div class="col">
             <div class="card card-widget">
                 <div class="card-body gradient-3">
                     <div class="media">
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col">
             <div class="card card-widget">
                 <div class="card-body gradient-4">
                     <div class="media">
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col">
             <div class="card card-widget">
                 <div class="card-body gradient-4">
                     <div class="media">
@@ -50,6 +50,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-12">
             <div class="card card-widget">
                 <div class="card-body gradient-6">
@@ -64,6 +65,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

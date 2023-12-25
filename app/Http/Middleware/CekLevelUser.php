@@ -24,6 +24,8 @@ class CekLevelUser
                 return $next($request);
             case 2:
                 return $next($request);
+            case 3:
+                return $next($request);
             default:
                 return redirect('login')->with('error', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }

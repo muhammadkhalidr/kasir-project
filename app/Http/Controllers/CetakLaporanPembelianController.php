@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pembelian;
+use App\Models\setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -11,9 +12,12 @@ class CetakLaporanPembelianController extends Controller
     public function index()
     {
 
+        $logo = setting::all();
+
         return view('laporan.pembelian.cetak', [
-            'title' => 'Laporan Pembelian',
+            'title' => env('APP_NAME') . ' | ' . 'Laporan Pembelian',
             'breadcrumb' => 'Laporan',
+            'logo' => $logo
         ]);
     }
 

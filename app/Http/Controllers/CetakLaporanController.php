@@ -11,7 +11,7 @@ class CetakLaporanController extends Controller
     public function index()
     {
         return view('laporan.cetak', [
-            'title' => 'Laporan',
+            'title' => env('APP_NAME') . ' | ' . 'Laporan',
             'breadcrumb' => 'Laporan',
         ]);
     }

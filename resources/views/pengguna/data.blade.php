@@ -23,10 +23,10 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Data Admin</h4>
+                        <h4 class="card-title">Data Penguna</h4>
                         <button type="button" class="btn btn-primary"
                             onclick="window.location='{{ url('admin-baru') }}'">
-                            <i class="fa fa-plus-circle"></i> Tambah Admin
+                            <i class="fa fa-plus-circle"></i> Tambah Pengguna
                         </button>
 
                         <div class="pesan mt-2">
@@ -43,7 +43,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Admin</th>
+                                        <th>Nama</th>
                                         <th>Email</th>
                                         <th>Username</th>
                                         <th>Level</th>
@@ -51,16 +51,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($penggunas as $row)
-                                        <tr>
+                                    @foreach ($penggunas as $data)
+                                        <tr>    
                                             <th><span class="label label-info">{{ $loop->iteration }}</span>
                                             </th>
-                                            <th>{{ $row->name }}</th>
-                                            <th>{{ $row->email }}</th>
-                                            <th>{{ $row->username }}</th>
-                                            <th>{{ $row->level }}</th>
+                                            <th>{{ $data->name }}</th>
+                                            <th>{{ $data->email }}</th>
+                                            <th>{{ $data->username }}</th>
+                                            <th>{{ $data->level == 1 ? 'Admin' : ($data->level == 3 ? 'Kasir' : 'Owner') }}
+                                            </th>
                                             <th>
-                                                <form method="POST" action="{{ 'pengguna/' . $row->id }}"
+                                                <form method="POST" action="{{ 'pengguna/' . $data->id }}"
                                                     style="display: inline">
                                                     @csrf
                                                     @method('DELETE')

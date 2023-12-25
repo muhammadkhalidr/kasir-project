@@ -42,7 +42,7 @@ class LaporanController extends Controller
             }
         }
         return view('laporan.data', [
-            'title' => 'Laporan',
+            'title' => env('APP_NAME') . ' | ' . 'Laporan',
             'pengeluarans' => $pengeluarans,
             'orderans' => $orderans,
             'gajikaryawans' => $gajiKaryawans,

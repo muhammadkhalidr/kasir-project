@@ -12,7 +12,7 @@ class CetakLaporanGajiController extends Controller
     {
 
         return view('laporan.gaji.cetak', [
-            'title' => 'Laporan Gaji',
+            'title' => env('APP_NAME') . ' | ' . 'Laporan Gaji',
             'breadcrumb' => 'Laporan',
         ]);
     }

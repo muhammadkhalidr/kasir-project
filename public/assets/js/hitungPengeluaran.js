@@ -1,7 +1,7 @@
     // Fungsi untuk menghitung total
     function hitungTotal() {
-        var jumlahInput = document.getElementById('txtjumlah');
-        var totalInput = document.getElementById('txttotal');
+        var jumlahInput = document.getElementById('jumlah');
+        var totalInput = document.getElementById('total');
 
         // Konversi nilai jumlahInput menjadi angka (pastikan input hanya berisi angka)
         var jumlah = parseFloat(jumlahInput.value) || 0;
@@ -14,7 +14,7 @@
     }
 
     // Panggil fungsi hitungTotal saat nilai 'txtjumlah' berubah
-    document.getElementById('txtjumlah').addEventListener('input', hitungTotal);
+    document.getElementById('jumlah').addEventListener('input', hitungTotal);
 
     // Panggil fungsi hitungTotal saat halaman dimuat (jika nilai awal 'txtjumlah' sudah ada)
     window.addEventListener('load', hitungTotal);

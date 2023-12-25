@@ -98,6 +98,19 @@
                                 </div>
                                 <input type="hidden" name="level" value="1">
                                 <div class="form-group row">
+                                    <label class="col-lg-4 col-form-label" for="role">Role<span
+                                            class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <select name="level" class="form-control" id="role">
+                                            <option value="0"> ==> Pilih Role <== </option>
+                                            <option value="1">Admin</option>
+                                            <option value="3">Kasir</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
                                     <div class="col-lg-8 ml-auto">
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>

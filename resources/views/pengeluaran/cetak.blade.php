@@ -97,6 +97,7 @@
                 <th>Jumlah</th>
                 <th>Harga</th>
                 <th>Total</th>
+                <th>Via</th>
             </tr>
             @foreach ($groupedPengeluaran as $cetak)
                 <tr>
@@ -104,10 +105,12 @@
                     <td class="text-left">{{ $cetak->jumlah }}</td>
                     <td class="text-center">Rp. {{ number_format($cetak->harga, 0, ',', '.') }}</td>
                     <td class="text-right">Rp. {{ number_format($cetak->pengeluaran, 0, ',', '.') }}</td>
+                    <td>{{ $cetak->bank }}</td>
                 </tr>
             @endforeach
         @endforeach
         <tr style="background-color: #4d4d4d;color:white;">
+            <td></td>
             <td></td>
             <td class="text-right">
                 <b><i>Sub Total</i></b>
@@ -117,11 +120,12 @@
                 Rp.
                 {{ number_format($totals[$id_pengeluaran], 0, ',', '.') }}
             </td>
-            <td class="text-center"></td>
+            <td></td>
         </tr>
     </table>
+    {{-- <p>Via : {{ $groupedPengeluaran->bank }}</p> --}}
 
-    <footer class="footer">&copy; Aneka Kreasi {{ date('Y') }}</footer>
+    <footer class="footer">Copyright &copy; Khalid R {{ date('Y') }}</footer>
 </body>
 
 </html>

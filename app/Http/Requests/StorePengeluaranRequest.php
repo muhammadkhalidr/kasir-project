@@ -19,32 +19,32 @@ class StorePengeluaranRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
-            'txtket' => 'required',
-            'txtjumlah' => 'required|numeric',
-            'txttotal' => 'required|numeric',
-        ];
-    }
+    // public function rules(): array
+    // {
+    //     return [
+    //         'txtket' => 'required',
+    //         'txtjumlah' => 'required|numeric',
+    //         'txttotal' => 'required|numeric',
+    //     ];
+    // }
 
-    public function messages(): array
-    {
-        return [
-            'txtket.required'            => ':attribute Tidak Boleh Kosong',
-            'txtjumlah.required'            => ':attribute Tidak Boleh Kosong',
-            'txtjumlah.numeric'            => ':attribute Harus Angka',
-            'txttotal.required'            => ':attribute Tidak Boleh Kosong',
-            'txttotal.numeric'            => ':attribute Harus Angka',
-        ];
-    }
+    // public function messages(): array
+    // {
+    //     return [
+    //         'txtket.required'            => ':attribute Tidak Boleh Kosong',
+    //         'txtjumlah.required'            => ':attribute Tidak Boleh Kosong',
+    //         'txtjumlah.numeric'            => ':attribute Harus Angka',
+    //         'txttotal.required'            => ':attribute Tidak Boleh Kosong',
+    //         'txttotal.numeric'            => ':attribute Harus Angka',
+    //     ];
+    // }
 
-    public function attributes(): array
-    {
-        return [
-            'txtket' => 'Keterangan',
-            'txtjumlah' => 'Jumlah',
-            'txttotal' => 'Jumlah',
-        ];
-    }
+    // public function attributes(): array
+    // {
+    //     return [
+    //         'txtket' => 'Keterangan',
+    //         'txtjumlah' => 'Jumlah',
+    //         'txttotal' => 'Jumlah',
+    //     ];
+    // }
 }

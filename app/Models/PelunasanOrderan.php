@@ -17,6 +17,7 @@ class PelunasanOrderan extends Model
         'created_at',
         'updated_at',
         'bank',
+        'via',
         'bukti_transfer',
         'id_bayar'
     ];

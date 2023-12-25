@@ -11,7 +11,15 @@
         <link rel="icon" type="image/png" sizes="16x16" href="assets/images/settings/{{ $item->favicon }}">
     @endforeach
     <!-- Custom Stylesheet -->
+
+    {{-- select2 --}}
+    {{-- <link rel="stylesheet" href="{{ asset('/') }}assets/plugins/select2/css/select2.min.css"> --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('/') }}/assets/plugins/sweetalert2/sweetalert2.min.css">
+
     <link href="{{ asset('/') }}assets/plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="{{ asset('/') }}assets/plugins/toastr/css/toastr.min.css" rel="stylesheet">
     <link href="{{ asset('/') }}assets/css/style.css" rel="stylesheet">
 </head>
 
@@ -83,15 +91,23 @@
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <span>{{ $user->level == 1 ? 'Administrator' : 'Owner' }}</span>
+                                            <span>{{ $user->name }}</span>
                                             {{-- <span>{{ $user->name }}</span> --}}
                                         </li>
                                         <li>
                                             <a href="{{ url('profile') }}"><i class="icon-user"></i>
                                                 <span>Profile</span></a>
                                             <hr class="my-2">
-                                            <a href="{{ url('setting') }}"><i class="fa fa-cogs"></i>
-                                                <span>Setting</span></a>
+                                            @if (auth()->check())
+                                                @if (auth()->user()->level == 1)
+                                                    <a href="{{ url('setting') }}"><i class="fa fa-cogs"></i>
+                                                        <span>Setting</span></a>
+                                                @endif
+                                                @if (auth()->user()->level == 2)
+                                                    <a href="{{ url('setting') }}"><i class="fa fa-cogs"></i>
+                                                        <span>Setting</span></a>
+                                                @endif
+                                            @endif
                                         </li>
                                         <hr class="my-2">
                                         <li><a href="{{ url('logout') }}"><i class="icon-key"></i>

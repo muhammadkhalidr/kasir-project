@@ -14,4 +14,7 @@ class Orderan extends Model
 
     public $incrementing = false;
     public $timestamps = true;
+
+
+
 }

@@ -40,6 +40,8 @@ class LoginController extends Controller
                 return redirect()->to('home');
             } elseif ($user->hasRole('owner')) {
                 return redirect()->to('home');
+            } elseif ($user->hasRole('kasir')) {
+                return redirect()->to('/orderan');
             }
 
             return redirect()->intended('/');

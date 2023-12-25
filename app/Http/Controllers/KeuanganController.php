@@ -20,10 +20,10 @@ class KeuanganController extends Controller
         $kas = KasMasuk::all();
 
         // Hitung kas masuk
-        $kasMasuk = $kas->sum('pemasukan') - $kas->sum('pengeluaran');
+        $kasMasuk = $kas->where('bank', '!=', 'kaskecil')->sum('pemasukan') - $kas->sum('pengeluaran');
 
         return view('keuangan.data', [
-            'title' => 'Data Keuangan',
+            'title' => env('APP_NAME') . ' | ' . 'Data Keuangan',
             'breadcrumb' => 'Data Keuangan',
             'user' => $user,
             'pengeluarans' => $pengeluaran->sum('jumlah'),

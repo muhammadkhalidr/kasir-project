@@ -21,7 +21,7 @@ class GajiKaryawanController extends Controller
         $karyawans = Karyawan::all();
 
         return view('gaji.data', [
-            'title' => 'Gaji Karyawan',
+            'title' => env('APP_NAME') . ' | ' . 'Gaji Karyawan',
             'breadcrumb' => 'Gaji Karyawan',
             'user' => $user,
             'gajikaryawans' => $gajikaryawans,

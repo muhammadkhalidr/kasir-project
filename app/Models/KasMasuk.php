@@ -17,7 +17,10 @@ class KasMasuk extends Model
 
     protected $fillable = [
         'id_generate',
+        'pemasukan',
         'pengeluaran',
         'keterangan',
+        'name_kasir',
+        'bank'
     ];
 }

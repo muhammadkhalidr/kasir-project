@@ -12,6 +12,17 @@ class Pengeluaran extends Model
     protected $pengeluarans;
     protected $primaryKey = 'id_pengeluaran';
 
+    protected $fillable = [
+        'id_pengeluaran',
+        'id_generate',
+        'keterangan',
+        'jumlah',
+        'harga',
+        'total',
+        'created_at',
+        'updated_at',
+    ];
+
     public $incrementing = false;
     public $timestamps = true;
 

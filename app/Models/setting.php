@@ -11,7 +11,7 @@ class setting extends Model
 
     protected $settings;
     protected $primaryKey = 'id_setting';
-    
+
     public $incrementing = true;
     public $timestamps = true;
 }

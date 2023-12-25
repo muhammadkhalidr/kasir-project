@@ -21,6 +21,7 @@ class DashboardController extends Controller
         $filterDate = $request->date ?? now();
 
         $kasMasuks = KasMasuk::whereDate('created_at', $filterDate)
+            ->where('bank', '!=', 'kaskecil')
             ->select(DB::raw('SUM(pemasukan) as total_pendapatan'), DB::raw('SUM(pengeluaran) as total_pengeluaran'))
             ->first();
 
@@ -28,26 +29,22 @@ class DashboardController extends Controller
         $pengeluaran = Pengeluaran::all();
         $pembelian = Pembelian::all();
 
-        // Menghitung jumlah total dan uang muka berdasarkan keterangan
-        $totalUangMuka = DetailOrderan::where('status', 'Belum Lunas')->sum('uangmuka');
-        $totalJumlahTotal = DetailOrderan::where('status', 'Belum Lunas')->sum('subtotal');
-
-        // Menghitung jumlah total berdasarkan status Lunas
-        $totalJumlahTotalLunas = DetailOrderan::where('status', 'Lunas')->sum('subtotal');
+        $pendapatan = KasMasuk::whereDate('created_at', $filterDate)
+            ->where('bank', '!=', 'kaskecil')
+            ->sum('pemasukan');
 
         $kasKeluar = $pengeluaran->sum('total') + $pembelian->sum('total');
 
         return view('layout.home', [
             'totalOrderan' => $datas->count(),
-            'totalPendapatan' => $totalUangMuka + $totalJumlahTotalLunas,
+            // 'totalPendapatan' => $totalUangMuka + $totalJumlahTotalLunas,
             'totalPengeluaran' => $kasKeluar,
             'title' => 'Dashboard | Home',
             'user' => $user,
             'totalPendapatanG' => $kasMasuks->total_pendapatan ?? 0,
             'totalPengeluaranG' => $kasMasuks->total_pengeluaran ?? 0,
             'filterDate' => $filterDate,
-
-
+            'totalPendapatan' => $pendapatan
         ]);
     }
 }

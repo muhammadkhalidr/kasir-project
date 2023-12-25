@@ -13,21 +13,13 @@ return new class extends Migration
     {
         Schema::create('pelunasan_orderans', function (Blueprint $table) {
             $table->id();
-            $table->string('id_orderan');
             $table->string('notrx');
             $table->string('total_bayar');
             $table->timestamps();
 
             $table->string('bank')->nullable();
             $table->string('bukti_transfer')->nullable();
-
-            // Menggunakan unsignedBigInteger untuk foreign key
-            $table->unsignedBigInteger('id_bayar')->nullable();
-            $table->foreign('id_bayar')
-                ->references('id_transaksi')
-                ->on('detail_orderans')
-                ->onUpdate('cascade')
-                ->onDelete('set null');
+            $table->integer('id_bayar')->nullable();
         });
     }
 

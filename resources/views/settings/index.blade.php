@@ -51,6 +51,31 @@
                                             value="{{ $item->instagram }}">
                                     </div>
                                 </div>
+                                @if (auth()->check())
+                                    @if (auth()->user()->level == 2)
+                                        <hr>
+                                        <h4 class="text-center"><i class="bi bi-clock"></i> Jam Transaksi</h4>
+                                        <hr>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="dari">Dari Jam</label>
+                                                <input type="number" class="form-control" id="dari" name="darijam"
+                                                    value="{{ $item->darijam }}">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="sampaijam">Sampai Jam</label>
+                                                <input type="number" class="form-control" id="sampaijam" name="sampaijam"
+                                                    value="{{ $item->sampaijam }}">
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+                                <div class="form-group">
+                                    <label for="footer-invoice">Footer Invoice</label>
+                                    <textarea name="footer_invoice" id="" cols="30" rows="10" class="form-control text-center">{{ $item->pesan }}
+                                    </textarea>
+                                </div>
+
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
                         @endforeach
@@ -80,6 +105,16 @@
                                 <input type="file" name="logo_login" class="form-control" id="logo_login"
                                     value="{{ $item->logo_login }}">
                             </div>
+                            <div class="form-group">
+                                <label for="lunas">Logo Lunas</label>
+                                <input type="file" name="lunas" class="form-control" id="lunas"
+                                    value="{{ $item->logo_lunas }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="blunas">Logo Belum Lunas</label>
+                                <input type="file" name="blunas" class="form-control" id="blunas"
+                                    value="{{ $item->logo_blunas }}">
+                            </div>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
                     </div>
@@ -105,12 +140,21 @@
                                 <img src="assets/images/settings/{{ $item->login_logo }}" alt="login-logo"
                                     class="logo-settings form-control">
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="login-logo">Login Lunas</label>
+                                <img src="assets/images/settings/{{ $item->logo_lunas }}" alt="logo-lunas"
+                                    class="logo-settings form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="login-logo">Login Belum Lunas</label>
+                                <img src="assets/images/settings/{{ $item->logo_blunas }}" alt="logo-blunas"
+                                    class="logo-settings form-control">
+                            </div>
                         @endforeach
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
 <!-- #/ container -->

@@ -16,7 +16,14 @@ use App\Http\Controllers\CetakLaporanGajiController;
 use App\Http\Controllers\CetakLaporanPembelianController;
 use App\Http\Controllers\GajiKaryawanController;
 use App\Http\Controllers\HutangController;
+use App\Http\Controllers\KasController;
+use App\Http\Controllers\LogTranasksiController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\PiutangController;
+use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\SettingController;
+use App\Models\Orderan;
+use App\Models\Pelanggan;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +70,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/orderan', [OrderanController::class, 'index'])->middleware('can:orderan.data');
         Route::get('/orderan-baru', [OrderanController::class, 'tambahOrderan']);
         Route::post('/orderan.pelunasan', [OrderanController::class, 'pelunasan'])->name('orderan.pelunasan');
+        Route::post('/orderan/tambahPelanggan', [OrderanController::class, 'tambahPelanggan'])->name('orderan.tambahPelanggan');
+        Route::post('/orderan.cari', [OrderanController::class, 'cariData'])->name('orderan.cari');
 
         // Untuk Dashboard
         Route::get('/home', [DashboardController::class, 'index']);
@@ -94,6 +103,29 @@ Route::group(['middleware' => ['auth']], function () {
         // Untuk Setting
         Route::resource('setting', SettingController::class);
         Route::post('/setting', [SettingController::class, 'editLogo']);
+
+        // Untuk Pelanggan
+        Route::resource('pelanggan', PelangganController::class);
+        Route::get('/pelanggan', [PelangganController::class, 'index']);
+        Route::get('tambah-pelanggan', [PelangganController::class, 'tambahPelanggan']);
+
+
+        // Untuk Rekening
+        Route::resource('rekening', RekeningController::class);
+
+        // Log Transaksi
+        Route::get('/aktifitas', [LogTranasksiController::class, 'index']);
+
+        // Piutang Penjualan
+        Route::get('/piutang', [PiutangController::class, 'index']);
+
+        // Rincian Pendapatan
+        // Belum ada
+
+        // Kas
+        Route::get('/kas', [KasController::class, 'index']);
+        Route::post('/kas', [KasController::class, 'tambahKas'])->name('kas.tambahKas');
+        Route::delete('/kas/{no_reff}', [KasController::class, 'hapusKasKecil'])->name('kas.hapusKasKecil');
     });
 
     // Akses Untuk Owner
@@ -103,10 +135,41 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('pengguna', PenggunaController::class)->middleware('can:pengguna.data');
         Route::get('/admin-baru', [PenggunaController::class, 'tambahPengguna']);
     });
+
+
+    // Akses Untuk Kasir
+    Route::group(['middleware' => ['CekLevelUser:3']], function () {
+
+        // Untuk Orderan
+        Route::resource('orderan', OrderanController::class);
+        Route::get('/orderan', [OrderanController::class, 'index'])->middleware('can:orderan.data');
+        Route::get('/orderan/{id}', [OrderanController::class, 'index']);
+        Route::get('/orderan-baru', [OrderanController::class, 'tambahOrderan']);
+        Route::post('/orderan.pelunasan', [OrderanController::class, 'pelunasan'])->name('orderan.pelunasan');
+        Route::post('/orderan/tambahPelanggan', [OrderanController::class, 'tambahPelanggan'])->name('orderan.tambahPelanggan');
+        Route::post('/orderan/filterJumlah', [OrderanController::class, 'filterJumlah'])->name('orderan.filterJumlah');
+
+
+        // Untuk Dashboard
+        Route::get('/home', [DashboardController::class, 'index']);
+
+        // Untuk Pembelian
+        Route::resource('/pembelian', PembelianController::class)->middleware('can:pembelian.data');
+        Route::get('/pembelianbaru', [PembelianController::class, 'tambahPembelian']);
+
+        // Untuk Pelanggan
+        Route::resource('pelanggan', PelangganController::class);
+        Route::get('/pelanggan', [PelangganController::class, 'index']);
+        Route::get('tambah-pelanggan', [PelangganController::class, 'tambahPelanggan']);
+
+        // Untuk Pengeluaran
+        Route::resource('pengeluaran', PengeluaranController::class)->middleware('can:pengeluaran.data');
+        Route::get('/pengeluaranbaru', [PengeluaranController::class, 'tambahPengeluaran']);
+    });
 });
 
-
 Route::get('orderan/print_invoice/{notrx}', [OrderanController::class, 'printInvoice'])->name('orderan.print_invoice');
+Route::get('orderan/print_invoice58/{notrx}', [OrderanController::class, 'printInvoice58'])->name('orderan.print_invoice58');
 Route::get('pengeluaran/print_laporan/{id_pengeluaran}', [PengeluaranController::class, 'printInvoice'])->name('cetak.print_invoice');
 Route::get('pembelian/print_faktur/{id_pembelian}', [PembelianController::class, 'printFaktur'])->name('pembelian.print_faktur');
 // Route::get('/laporan/cetak-laporan', [LaporanController::class, 'cetakLaporan'])->name('laporan.cetakLaporan');
@@ -125,9 +188,12 @@ Route::get('laporan/gaji/records', [CetakLaporanGajiController::class, 'laporan_
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 
-Route::get('/cek', function () {
-    return view('orderan.tes');
+
+Route::get('/tescode', function () {
+    return view('tescode');
 });
+
+Route::get('/cek', [OrderanController::class, 'cek']);
 
 // 404
 Route::get('{any}', function () {

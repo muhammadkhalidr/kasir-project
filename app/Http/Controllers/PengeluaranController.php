@@ -7,6 +7,8 @@ use App\Http\Requests\StorePengeluaranRequest;
 use App\Http\Requests\UpdatePengeluaranRequest;
 use App\Models\DetailPengeluaran;
 use App\Models\KasMasuk;
+use App\Models\Rekening;
+use App\Models\setting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +28,8 @@ class PengeluaranController extends Controller
             ->select('pengeluarans.id_pengeluaran', 'pengeluarans.keterangan', 'pengeluarans.jumlah', 'pengeluarans.harga', 'kas_masuks.pengeluaran', 'kas_masuks.id', 'kas_masuks.created_at',)
             ->get();
 
-        $groupedPengeluarans = $pengeluarans->groupBy('id_pengeluaran');
+        // dd($pengeluarans);
+        $groupedPengeluarans = $pengeluarans->sortByDesc('id_pengeluaran')->groupBy('id_pengeluaran');
 
         $totals = $groupedPengeluarans->map(function ($group) {
             return $group->sum('pengeluaran');
@@ -37,13 +40,16 @@ class PengeluaranController extends Controller
             return $pengeluaran;
         });
 
+        $bank = Rekening::select('bank')->pluck('bank')->toArray();
+
         return view('pengeluaran.data', [
-            'title' => 'Data Pengeluaran',
+            'title' => env('APP_NAME') . ' | ' . 'Data Pengeluaran',
             'breadcrumb' => 'Pengeluaran',
             'user' => $user,
             'groupedPengeluarans' => $groupedPengeluarans,
             'totals' => $totals,
             'formattedPengeluarans' => $formattedPengeluarans,
+            'bank' => $bank,
         ]);
     }
 
@@ -77,8 +83,8 @@ class PengeluaranController extends Controller
      */
     public function store(StorePengeluaranRequest $request)
     {
-        $validate = $request->validated();
-
+        // $validate = $request->validated();
+        $user = Auth::user();
         $pengeluaranTerakhir = Pengeluaran::where('id_pengeluaran', $request->txtid)->latest('id_pengeluaran')->first();
 
         if ($pengeluaranTerakhir) {
@@ -95,28 +101,31 @@ class PengeluaranController extends Controller
             }
         }
 
-        $pengeluaran = new Pengeluaran;
-        $kasMasuk = new KasMasuk;
-        $detailPengeluaran = new DetailPengeluaran;
-        $pengeluaran->id_pengeluaran = $request->txtid;
-        $pengeluaran->id_generate = $idBaru;
-        $pengeluaran->keterangan = $request->txtket;
-        $pengeluaran->jumlah = $request->txtjumlah;
-        $pengeluaran->harga = $request->txtharga;
-        $pengeluaran->total = $request->txttotal;
+        $data = $request->all();
+        // dd($data);
+        foreach ($data['nopengeluaran'] as $key => $value) {
 
-        // Cek saldo kas masuk
-        $saldoKasMasuk = KasMasuk::sum('pemasukan');
-        if ($saldoKasMasuk && $saldoKasMasuk < $pengeluaran->total) {
-            return redirect()->back()->with('error', 'Saldo tidak cukup!');
+            Pengeluaran::create([
+                'id_pengeluaran' => $value,
+                'id_generate' => $idBaru,
+                'keterangan' => $data['keterangan'][$key],
+                'jumlah' => $data['jumlah'][$key],
+                'harga' => $data['harga'][$key],
+                'total' => $data['total'][$key],
+            ]);
+
+            // dd($data);
+
+            $kasMasuk = new KasMasuk;
+            $kasMasuk->id_generate = $idBaru;
+            $kasMasuk->keterangan = "Pengeluaran Dari - No #" . $value . ($data['metode'] === 'tunai' ? ' (Tunai) ' : ' - Metode Bank ' . $data['metode']);
+            $kasMasuk->name_kasir = $user->name;
+            $kasMasuk->pengeluaran = $data['total'][$key];
+            $kasMasuk->bank = $data['metode'];
+
+            $kasMasuk->save();
         }
 
-        $pengeluaran->save();
-
-        $kasMasuk->id_generate = $idBaru;
-        $kasMasuk->keterangan = "Pengeluaran - " . $request->txtket;
-        $kasMasuk->pengeluaran = $pengeluaran->total;
-        $kasMasuk->save();
 
         return redirect('pengeluaran')->with('msg', 'Data Berhasil Ditambahkan!');
     }
@@ -172,7 +181,7 @@ class PengeluaranController extends Controller
         }
 
         $pengeluarans = Pengeluaran::join('kas_masuks', 'pengeluarans.total', '=', 'kas_masuks.pengeluaran')
-            ->select('pengeluarans.id_pengeluaran', 'pengeluarans.keterangan', 'pengeluarans.jumlah', 'pengeluarans.harga', 'kas_masuks.pengeluaran', 'kas_masuks.id', 'kas_masuks.created_at',)
+            ->select('pengeluarans.id_pengeluaran', 'pengeluarans.keterangan', 'pengeluarans.jumlah', 'pengeluarans.harga', 'kas_masuks.pengeluaran', 'kas_masuks.id', 'kas_masuks.created_at', 'kas_masuks.bank')
             ->where('pengeluarans.id_pengeluaran', $id_pengeluaran)
             ->get();
 

@@ -22,11 +22,14 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Data Pengeluaran</h4>
-                        <button type="button" class="btn btn-primary"
+                        {{-- <button type="button" class="btn btn-primary"
                             onclick="window.location='{{ url('pengeluaranbaru') }}'">
                             <i class="fa fa-plus-circle"></i> Tambah Data Baru
-                        </button>
+                        </button> --}}
 
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target=".bd-transaksi-modal-lg"> <i class="fa fa-plus"></i> Pengeluaran
+                            Baru</button>
                         <div class="pesan mt-2">
                             @if (session('msg'))
                                 <div class="alert alert-primary alert-dismissible fade show">
@@ -46,11 +49,25 @@
                                         <tr data-parent="#table-guest">
                                             <td colspan="5" class="p-0">
                                                 <table class="table table-striped">
+                                                    <thead class="thead-success">
+                                                        <tr>
+                                                            <th>No Faktur</th>
+                                                            <th>
+                                                                <button class="btn btn-dark btn-sm">#
+                                                                    {{ $groupedPengeluaran[0]->id_pengeluaran }}</button>
+                                                            </th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
                                                     <thead class="thead-primary">
                                                         <tr>
                                                             <th style="width:4%!important" class="text-right">#No.</th>
                                                             <th>Keterangan</th>
-                                                            <th class="text-left" style="width:30%!important">Jumlah
+                                                            <th class="text-left" style="width:10%!important">Jumlah
                                                             </th>
                                                             <th class="text-center">Harga</th>
                                                             <th class="text-right">Nominal</th>
@@ -58,6 +75,7 @@
                                                             <th class="w-10 text-right">Aksi</th>
                                                         </tr>
                                                     </thead>
+
                                                     <tbody>
                                                         @php $firstRow = true; @endphp
                                                         @foreach ($groupedPengeluaran as $pengeluaran)
@@ -137,9 +155,96 @@
         </div>
     </div>
     <!-- #/ container -->
+    @include('pengeluaran.components.modal')
 </div>
 <!--**********************************
             Content body end
         ***********************************-->
 
 @include('partials.footer')
+
+<script>
+    $(document).ready(function() {
+        // Menangani klik pada tombol tambahform
+        $(document).on("click", ".tambahform", function() {
+            // Duplikat form-transaksi
+            var newForm = $(".form-transaksi:first").clone();
+
+            // Bersihkan nilai input di form baru
+            newForm.find("input").val("");
+
+            // Sisipkan form baru setelah form terakhir
+            $(".form-transaksi:last").after(newForm);
+
+            // Tambahkan event handler untuk tombol hapus pada form baru
+            newForm.find(".hapusform").on("click", function() {
+                // Hapus form saat tombol hapus diklik
+                $(this).closest(".form-transaksi").remove();
+            });
+
+            $(document).on("click", ".hapusform", function() {
+                // Hapus form saat tombol hapus diklik
+                $(this).closest(".form-transaksi").remove();
+            });
+        });
+
+        $(document).on("input", ".jumlah, .harga, .uangmuka, .sisa", function() {
+            // Menghitung total untuk setiap form
+            $(".form-transaksi").each(function() {
+                var jumlah = parseFloat($(this).find(".jumlah").val()) || 0;
+                var harga = parseFloat($(this).find(".harga").val()) || 0;
+
+                var total = jumlah * harga;
+
+                $(this).find(".total").val(total);
+            });
+
+            // Menghitung subtotal dari semua total
+            var subtotal = 0;
+            $(".form-transaksi").each(function() {
+                subtotal += parseFloat($(this).find(".total").val()) || 0;
+            });
+
+            // Mengambil nilai uang muka
+            var uangMuka = parseFloat($(".uangmuka").val()) || 0;
+
+            // Mengurangkan uang muka dari total, bukan dari subtotal
+            var totalSetelahUangMuka = subtotal - uangMuka;
+
+            // Mengupdate nilai input subtotal
+            $(".subtotal").val(subtotal);
+
+            var sisaPembayaran = parseFloat($(".sisa").val()) || 0;
+            $(".sisa").val(totalSetelahUangMuka);
+        });
+
+        // Menambahkan event listener untuk input uangmuka
+        $(document).on("input", ".uangmuka", function() {
+            // Menghitung kembali subtotal saat input uangmuka diubah
+            var subtotal = 0;
+            $(".form-transaksi").each(function() {
+                subtotal += parseFloat($(this).find(".total").val()) || 0;
+            });
+
+            // Mengambil nilai uang muka
+            var uangMuka = parseFloat($(".uangmuka").val()) || 0;
+
+            // Mengurangkan uang muka dari total
+            var totalSetelahUangMuka = uangMuka;
+
+            // Mengupdate nilai input subtotal
+            $(".subtotal").val(subtotal);
+        });
+
+
+        // Menangani perubahan nilai saat formulir baru ditambahkan
+        $(document).on("input", ".form-transaksi:last .jumlah, .form-transaksi:last .harga", function() {
+            var jumlah = parseFloat($(this).closest(".row").find(".jumlah").val()) || 0;
+            var harga = parseFloat($(this).closest(".row").find(".harga").val()) || 0;
+
+            var total = jumlah * harga;
+
+            $(this).closest(".row").find(".total").val(total);
+        });
+    });
+</script>

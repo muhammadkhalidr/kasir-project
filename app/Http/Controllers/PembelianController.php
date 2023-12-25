@@ -22,7 +22,7 @@ class PembelianController extends Controller
         // dd($datas);
 
         return view('pembelian.data', [
-            'title' => 'Data Pembelian',
+            'title' => env('APP_NAME') . ' | ' . 'Data Pembelian',
             'breadcrumb' => 'Pembelian',
             'user' => $user,
             'pembelians' => $datas,
@@ -46,7 +46,7 @@ class PembelianController extends Controller
     public function store(StorePembelianRequest $request)
     {
         $validate = $request->validated();
-
+        $user = Auth::user();
         $pembelianBaru = Pembelian::latest('id_pembelian')->first();
 
         if ($pembelianBaru) {
@@ -78,8 +78,9 @@ class PembelianController extends Controller
 
         $kasMasuk = new KasMasuk;
         $kasMasuk->id_generate = $idBaru;
-        $kasMasuk->keterangan = $request->txtbahan;
+        $kasMasuk->keterangan = "Pembelian dari No#" . $idBaru;
         $kasMasuk->pengeluaran = $request->txttotal;
+        $kasMasuk->name_kasir = $user->name;
         $kasMasuk->save();
 
         return redirect('pembelian')->with('msg', 'Data Berhasil Ditambahkan!');

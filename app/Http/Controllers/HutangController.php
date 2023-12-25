@@ -22,7 +22,7 @@ class HutangController extends Controller
         $data = Hutang::all();
 
         return view('hutang.index', [
-            'title' => 'Hutang',
+            'title' => env('APP_NAME') . ' | ' . 'Hutang',
             'breadcrumb' => 'Hutang',
             'hutangs' => $data,
             'user' => $user,

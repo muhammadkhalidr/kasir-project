@@ -19,7 +19,7 @@ class KaryawanController extends Controller
         $user = Auth::user();
         $karyawans = Karyawan::all();
         return view('karyawan.main', [
-            'title' => 'Data Karyawan',
+            'title' => env('APP_NAME') . ' | ' . 'Data Karyawan',
             'breadcrumb' => 'Data Karyawan',
             'user' => $user,
             'karyawans' => $karyawans,
@@ -74,7 +74,7 @@ class KaryawanController extends Controller
         return view('karyawan.edit', [
             'title' => 'Edit Karyawan',
             'user' => $user,
-            ])->with([
+        ])->with([
             'txtid' => $id_karyawan,
             'txtnama' => $karyawan->nama_karyawan,
             'txtalamat' => $karyawan->alamat,

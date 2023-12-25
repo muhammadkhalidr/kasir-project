@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 'foto' => $foto,
             ]);
         });
+
+        Paginator::useBootstrap();
     }
 }

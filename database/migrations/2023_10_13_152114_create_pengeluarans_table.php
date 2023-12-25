@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengeluarans', function (Blueprint $table) {
-            $table->bigInteger('id_pengeluaran')->nullable();
+            $table->id('id');
+            $table->string('id_pengeluaran')->nullable();
             $table->string('id_generate')->nullable();
             $table->string('keterangan')->nullable();
             $table->bigInteger('jumlah')->nullable();
